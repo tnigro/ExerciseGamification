@@ -1,0 +1,16 @@
+{% extends 'planner/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-6 mx-0 px-0">
+    	<a href="{% url 'planner:calendar' %}?{{ prev_month }}"> Previous Month </a>
+	</div>
+	<div class="col-6 mx-0 px-0 d-flex">
+    	<a class="ml-auto" href="{% url 'planner:calendar' %}?{{ next_month }}"> Next Month </a>
+	</div>
+</div>
+<br>
+<div class="row mb-5 p-0 justify-content-center">
+    {{ calendar }}
+</div>
+{% endblock %}

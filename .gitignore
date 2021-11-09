@@ -1,0 +1,5 @@
+db.sqlite3
+run.sh
+login/__pycache__
+logger/__pycache__
+.idea/

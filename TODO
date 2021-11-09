@@ -1,0 +1,18 @@
+GENERAL REQUIREMENTS FOR CS3240 PROJECT:        STATUS
+- incoporate google login                       DONE
+- account management, save workouts, etc.       DONE
+- incorporate at least one third-party API      DONE
+- switch database to Postgres                   DONE
+
+REQS FOR USER INTERACTION:                      STATUS
+- user search function                          DONE
+- add public-facing profile page for users      DONE
+- friend leaderboard                            DONE
+    - activity-specifec leaderboards            -
+- feed page for friends' workouts               DONE
+- display user level/streak to friends          DONE
+- allow multi-token search                      DONE
+
+OTHER REQS:
+- weekly update on acheivements                 -
+- add description field to workouts             DONE

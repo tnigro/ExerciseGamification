@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <title>Gamercise | {{ user.username }}</title>
+
+        {% include "main/includes/head.html" %}
+    </head>
+    <body>
+        {% include "main/includes/navbar.html" %}       
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                </div>
+                <div class="col-md-3">
+                {% if friendship %}
+                    <h3><span class="badge badge-success float-right">Friends</span></h3>
+                {% elif friend_request %}
+                    <button type="submit" class="btn btn-secondary float-right" disabled>Request sent</button>
+                {% elif not self %}
+                    <form action="{% url 'social:detail' user.username %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary float-right">Send friend request</button>
+                    </form>
+                {% endif %}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h5 class="text-muted">{{ points }} points earned</h5>
+                    <div class="border rounded p-2">
+                        <h5>Level {{ level }}</h5>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" id="progress-bar" style="width:{{ percent }}%; background-color: #5065DC;" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <br>
+                {% if graph_url %}
+                    <img class="img-fluid mb-4" src="{{ graph_url }}">
+                {% endif %}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-5">
+                {% if feed %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-8">Recent Workouts</th>
+                                <th scope="col" class="col-4">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for workout in feed %}
+                            <tr>
+                            {% if friendship or self %}
+                                <td><a href="{% url 'social:post' workout.id %}">{{ workout }}</a></td>
+                            {% else %}
+                                <td>{{ workout }}</td>
+                            {% endif %}
+                                <td>{{ workout.get_points }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <h4 class="text-muted">No recent activity</h4>
+                {% endif %}
+                </div>
+            </div>        
+        {% if friendship %}
+            <div class="row justify-content-center my-0 mb-5">
+                <a href="{% url 'social:unfriend' user.username %}" class="badge badge-danger mt-4"><h6 class="mx-2 mb-1">Unfriend {{ user.first_name }} {{ user.last_name }}</h6></a>
+            </div>
+        {% endif %}
+        </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</html>

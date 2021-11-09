@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <title>Gamercise | workouts | {{ workout }}</title>
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+        {% include "main/includes/head.html" %}        
+    </head>
+    <body>
+        {% include "main/includes/navbar.html" %}
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-3 mb-3">
+                    <h2>{{ workout }}</h2>
+                    <h4 class="text-muted">{{ workout.get_points }} points</h4>
+                    <h5>Log activites</h5>
+                    <p>Log activities you did as part of your workout. You may log as many activities for this workout as you'd like.</p>
+                    <i class="fas fa-chevron-left"></i>&nbsp;<a href="{% url 'logger:index' %}">Back to workout list</a>
+                </div>
+                <div class="col-md-3 mb-5">
+                    <form class="mt-3" action="{% url 'logger:detail' workout.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="activity_type"><b>Activity type</b></label><br>
+                            <span id="activity-type-cont" hidden>{{ activity_type }}</span>
+                            <select name="activity_type" id="activity-type" onchange="updateForm(this);">
+                                <option value="run">Run</option>
+                                <option value="swim">Swim</option>
+                                <option value="lift">Lift</option>
+                                <option value="bike">Bike</option>
+                                <option value="otherActivity">Other</option>
+                            </select>
+                        </div>
+                        <!-- RUN -->
+                        <div class="activity-log form-group" id="run">
+                            {{ run_form }}
+                        </div>
+                        <!-- SWIM -->
+                        <div class="activity-log form-group" id="swim">
+                            {{ swim_form }}
+                        </div>
+                        <!-- LIFT -->
+                        <div class="activity-log form-group" id="lift">
+                            {{ lift_form }}
+                        </div>
+                        <!-- BIKE -->
+                        <div class="activity-log form-group" id="bike">
+                            {{ bike_form }}
+                        </div>
+                        <!-- Other -->
+                        <div class="activity-log form-group" id="otherActivity">
+                            {{ otherActivity_form }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Log</button>
+                    </form>
+                    {% for m in messages %}
+                        <div class="alert alert-primary mt-3" role="alert">{{ m }}</div>
+                    {% endfor %}
+                </div>
+            {% if activities %}
+                <div class="col-md-3 mb-5">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="col">Logged Activities</th>
+                                <th scope="col"></th>
+                            </tr>
+                        {% for act in activities %}
+                            <tr>
+                                <td>{{ act }}<br><span class="text-muted">{{ act.points }} points</span></td>
+                                <td>
+                                    <div class="d-flex flex-row-reverse">
+                                        <a href="{% url 'logger:delete_activity' act.type act.id %}" class="badge badge-danger py-1"><i class="fas fa-trash-alt"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            </div>
+            <div class="row justify-content-center mb-5">
+                <a href="{% url 'logger:delete_workout' workout.id %}" class="badge badge-danger"><h6 class="mx-2 my-1">Delete this workout log</h6></a>
+            </div>
+        </div>
+    </body>
+    <script>
+        // select correct option "selected" in dropdown
+        function initForm(){
+            type = document.querySelector("#activity-type-cont").innerHTML;
+            options = document.querySelector("#activity-type").querySelectorAll("option");
+            for(op of options){
+                if(op.value == type){
+                    op.selected = true;
+                    break;
+                }
+            }
+        }
+        initForm();
+        
+        /**
+         * update the available input fields displayed in the form based on what
+         * activity type is selected (run, swim, etc.)
+         */
+        function updateForm(){
+            selector = document.querySelector("#activity-type");
+            sections = document.querySelectorAll(".activity-log");
+            // check each form section
+            for(section of sections){
+                inputs = section.querySelectorAll("input");
+                selects = section.querySelectorAll("select");
+                // show
+                if(section.id == selector.value){
+                    section.style.display = "block";
+                    for(i of inputs)
+                        i.disabled = false;
+                    for(s of selects)
+                        s.disabled = false;
+                // hide and disable inputs
+                }else{
+                    section.style.display = "none";
+                    for(i of inputs)
+                        i.disabled = true;
+                    for(s of selects)
+                        s.disabled = true;
+                }
+            }
+        }
+        updateForm();
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</html>
