@@ -1,4 +1,5 @@
 # Gamercise
+# Collaborators: Tim Nigro, Darsh Patel, Iain Ramsey, David Ham, Kelvin Peng
 ### [gamercise.herokuapp.com](http://gamercise.herokuapp.com "gamercise.herokuapp.com")
 #### Software license: BSD-3
 ## Notable features
